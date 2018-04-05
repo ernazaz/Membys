@@ -1,0 +1,156 @@
+<form #f="ngForm">
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <ul *ngFor="let place of allPlaces">
+                <li (click)="places(place)" >{{ place.name }}</li>
+            </ul>
+        </div>
+        <div class="col-sm-10">
+            <h5>Pagrindine informacija</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Pavadinimas*</label>
+                        <div class="col-sm-9">
+                            <input ngModel #name="ngModel" [(ngModel)]="information.name" name="name" type="text" class="form-control" id="name" placeholder="Pavadinimas">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-3 col-form-label">Adresas*</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="locInput"  class="form-control" id="locInput" name="locInput" [(ngModel)]="address" #search [formControl]="searchControl"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Aprasymas*</label>
+                        <div class="col-sm-9">
+                            <textarea ngModel name="description" #description="ngModel" [(ngModel)]="information.description" id="description" cols="20" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-3 col-form-label">Facebook nuoroda</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Nuordo">
+                        </div>
+                    </div>
+                    <!--- Workdays time         -->
+                    <div class="form-group">
+                        <button (click)="mondays()" class="btn btn-primary">P</button>
+                        <button (click)="tuesdays()" class="btn btn-primary">A</button>
+                        <button (click)="wednesdays()" class="btn btn-primary">T</button>
+                        <button (click)="thursdays()" class="btn btn-primary">K</button>
+                        <button (click)="fridays()" class="btn btn-primary">Pn</button>
+                        <button (click)="saturdays()" class="btn btn-primary">Š</button>
+                        <button (click)="sundays()" class="btn btn-primary">S</button>
+                    </div>
+                    <!--- Workdays time         -->
+                    <div class="form-group">
+                        <div *ngIf="monday" class="form-group inline">
+                            <div *ngIf="mondayWork" class="form-group">
+                                    <select ngModel #mondayFrom="ngModel" [value]="mondayFrom"  name="mondayFrom" required class="form-control">
+                                            <option value="Nedirba">Nedirba</option>
+                                            <option *ngFor="let time of times" [value]="time.name">{{ time.name }}</option>
+                                        </select>
+                                <input type="text" ngModel name="mondayTo" [(ngModel)]="mondayTo">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="mondayWork" (click)="freeM()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!mondayWork" (click)="workM()" class="btn btn-secondary">Dirba</button>
+                            </div>
+                        </div>
+                        <div *ngIf="tuesday" class="form-group inline">
+                            <div *ngIf="tuesdayWork" class="form-group">
+                                <input type="text" ngModel name="tuesdayFrom" [(ngModel)]="tuesdayFrom" #pirmadienis="ngModel">
+                                <input type="text" ngModel name="tuesdayTo" [(ngModel)]="tuesdayTo" #pirmadienis="ngModel">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="tuesdayWork" (click)="freeTue()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!tuesdayWork" (click)="workTue()" class="btn btn-secondary">Dirba</button>
+                            </div>
+                        </div>
+                        <div *ngIf="wednesday" class="form-group inline">
+                            <div *ngIf="wednesdayWork" class="form-group">
+                                <input type="text" ngModel name="wednesdayFrom" [(ngModel)]="wednesdayFrom" #pirmadienis="ngModel">
+                                <input type="text" ngModel name="wednesdayTo" [(ngModel)]="wednesdayTo" #pirmadienis="ngModel">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="wednesdayWork" (click)="freeWed()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!wednesdayWork" (click)="workWed()" class="btn btn-secondary">Dirba</button>
+                            </div>
+                        </div>
+                        <div *ngIf="thursday" class="form-group inline">
+                            <div *ngIf="thursdayWork" class="form-group">
+                                <input type="text" ngModel name="thursdayFrom" [(ngModel)]="thursdayFrom" #pirmadienis="ngModel">
+                                <input type="text" ngModel name="thursdayTo" [(ngModel)]="thursdayTo" #pirmadienis="ngModel">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="thursdayWork" (click)="freeThur()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!thursdayWork" (click)="workThur()" class="btn btn-secondary">Dirba</button>
+                            </div>
+                        </div>
+                        <div *ngIf="friday" class="form-group inline">
+                            <div *ngIf="fridayWork" class="form-group">
+                                <input type="text" ngModel name="fridayFrom" [(ngModel)]="fridayFrom" #pirmadienis="ngModel">
+                                <input type="text" ngModel name="fridayTo" [(ngModel)]="fridayTo" #pirmadienis="ngModel">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="fridayWork" (click)="freeFri()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!fridayWork" (click)="workFri()" class="btn btn-secondary">Dirba</button>
+                            </div>
+                        </div>
+                        <div *ngIf="saturday" class="form-group inline">
+                            <div *ngIf="saturdayWork" class="form-group">
+                                <input type="text" ngModel name="saturdayFrom" [(ngModel)]="saturdayFrom" #pirmadienis="ngModel">
+                                <input type="text" ngModel name="saturdayTo" [(ngModel)]="saturdayTo" #pirmadienis="ngModel">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="saturdayWork" (click)="freeSat()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!saturdayWork" (click)="workSat()" class="btn btn-secondary">Dirba</button>
+                            </div>
+                        </div>
+                        <div *ngIf="sunday" class="form-group inline">
+                            <div *ngIf="sundayWork" class="form-group">
+                                <input type="text" ngModel name="sundayFrom" [(ngModel)]="sundayFrom " #pirmadienis="ngModel">
+                                <input type="text" ngModel name="sundayTo" [(ngModel)]="sundayTo" #pirmadienis="ngModel">
+                            </div>
+                            <div class="form-group">
+                                <button *ngIf="sundayWork" (click)="freeSun()" class="btn btn-secondary">Nedirba</button>
+                                <button *ngIf="!sundayWork" (click)="workSun()" class="btn btn-secondary">Dirba</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!---          -->
+                <div class="col-sm-5">
+                    <div class="form-group row">
+                        <label for="category"  class="col-sm-3 col-form-label">Kategorija*</label>
+                        <div class="col-sm-9">
+                            <select ngModel #category="ngModel" [(ngModel)]="information.category"  name="category" required class="form-control">
+                                <option value="Choose...">Choose...</option>
+                                <option *ngFor="let select of selects" [value]="select.name">{{ select.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <agm-map [latitude]="information.latitude || latitude " [longitude]="information.longitude || longitude" [scrollwheel]="false"
+                            [zoom]="zoom">
+                            <agm-marker [latitude]="information.latitude || latitude " [longitude]="information.longitude || longitude" [markerDraggable]="true"
+                                (dragEnd)="markerDragEnd($event)"></agm-marker>
+                        </agm-map>
+                    </div>
+                    <div class="form-group">
+                        <input ngModel id="image" name="image" #image="ngModel" type="file" format="png"   resize-max-height="300" resize-max-width="250"
+                        resize-quality="0.7"  (change)="detectFiles($event)"/>
+                        <div *ngIf= "url || information.logo" >
+                            <img [src]= "url || information.logo">
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <button (click)="save(f.value)" class="btn btn-primary" style="background:green">Issaugoti</button>
+        </div>
+    </div>
+</form>

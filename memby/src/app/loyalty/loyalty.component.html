@@ -1,0 +1,128 @@
+<form #f="ngForm">
+    <div class="form-group">
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <div class="form-group">
+            <button (click)="openBonus()" class="btn btn-primary" style="background:gray" > Tasku Sistema</button>
+          </div>
+          <div class="form-group">
+              <button type="button" (click)="show()" class="btn btn-primary">Prideti nauja lygi</button>
+          </div>
+          
+          <ul *ngFor="let l of levels$ | async  ">
+            <li (click)="getLevel(l)">{{ l.level }} Lygis</li>
+          </ul>
+        </div>
+        <div class="col-sm-10">
+  <!--            Tasku Sistemo forma                  -->
+          <form #form="ngForm" *ngIf="bonuses">
+            <div class="form-group">
+              <button (click)="addPrize()" class="btn btn-primary">Prideti priza</button>
+            </div>
+            <div *ngIf="prize || editbon " class="form-group">
+              <div class="form-group row">
+                <div class="col-sm-3">
+                  <h5>Tasku kiekis*</h5>
+                  <input required [(ngModel)]="bon.times" type="number" class="form-control" ngModel name="times" #times="ngModel" width="50%"
+                    min=1>
+                  <div *ngIf="times.touched && !times.valid " class="alert alert-danger">Iveskite skaiciu</div>
+                </div>
+                <div class="col-sm-5">
+                  <h5>Prizai*</h5>
+                  <input required type="text" [(ngModel)]="bon.prizes" class="form-control" name="prizes" ngModel #prizes="ngModel">
+                  <div *ngIf="prizes.touched && !prizes.valid " class="alert alert-danger">Iveskite Priza</div>
+                  <div class="form-group">
+                    <label for="">Aprasymas</label>
+                    <textarea name="prizeDescription" id="prizeDescription" ngModel class="form-control" cols="15" rows="5"></textarea>
+                  </div>
+                </div>
+              </div>
+              <button *ngIf="prize" (click)="saveBonus(form.value)" [disabled]="!form.valid" class="btn btn-primary">Issaugoti</button>
+              <button *ngIf="editbon" (click)="updateBonus(form.value)" class="btn btn-primary">Pakeisti</button>
+            </div>
+            <ul *ngFor="let b of bonus$ | async  ">
+              <li (click)="getBonuses(b)">{{ b.prizes }}</li>
+            </ul>
+          </form>
+          
+          <!-- Levelis-->
+  
+          <div *ngIf="turn || display">
+            <div class="form-group">
+              <label for="level">Lygis {{ level }}</label>
+            </div>
+            <div class="form-group">
+              <label for="visits">Apsilankymu skaičius</label>
+              <input [(ngModel)]="information.visits" name="visits" class="form-control" #visits="ngModel" maxlength="4" id="visits" placeholder="kiek">
+              <div *ngIf="visits.touched && !visits.valid" class="alert alert-danger">Iveskite skaiciu</div>
+            </div>
+            
+            <button *ngIf="turn" [disabled]="!f.valid" (click)="save(f.value)" class="btn btn-primary">Issaugoti</button>
+            <button type="button" *ngIf="turn" class="btn btn-secondary">Prideti pasiulymassss</button>
+            <button *ngIf="display" [disabled]="!f.valid" (click)="update(f.value)" class="btn btn-primary">Pakeisti</button>
+            <button type="button" *ngIf="display" (click)="forms()" class="btn btn-secondary">Prideti pasiulyma</button>
+  
+      <!--     Offeriai lygiams     -->
+  
+            <form #of="ngForm">
+              <div *ngIf="form || edit" class="form-group">
+                <div class="form-group row">
+                  <div class="col-sm-4">
+                    <label for="offer">Nuuolatine nuolaida*</label>
+                    <select [(ngModel)]="all_offers.offer" name="offer" id="offer" #offer="ngModel" class="form-control" required>
+                      <option value="">Pasirinkite</option>
+                      <option *ngFor="let offer of offers" [value]="offer.name">{{ offer.name }}</option>
+                    </select>
+                    <div *ngIf="offer.touched && !offer.valid" class="alert alert-danger">Pasirinkite</div>
+                  </div>
+                  <div class="col-sm-4">
+                    <label for="shortcut">Dydis</label>
+                    <input [(ngModel)]="all_offers.shortcut" name="shortcut" #shortcut="ngModel" id="shortcut" class=form-control type="text"
+                      maxlength="5" required>
+                    <div *ngIf="shortcut.touched && !shortcut.valid" class="alert alert-danger">Iveskite nuolaidos dydi</div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-4">
+                    <label for="gender">Auditorija</label>
+                    <select ngModel name="gender" #gender="ngModel" class="form-control" id="gender">
+                      <option value="">Pasirinkite</option>
+                      <option value="vyras">Vyras</option>
+                      <option value="moteris">Moteris</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-8 row">
+                    <div class="col-sm-2">
+                      <label for="agefrom">Nuo</label>
+                      <input ngModel name="age_from" [(ngModel)]="all_offers.age_from" #agefrom="ngModel" class="form-control" type="number" min="1" max="99">
+                    </div>
+                    <div class="col-sm-2">
+                      <label for="ageto">Iki</label>
+                      <input ngModel name="age_to" #ageto="ngModel" [(ngModel)]="all_offers.age_to" class="form-control" type="number" min="1" max="99">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="short">Trumpas aprasymas*</label>
+                  <textarea [(ngModel)]="all_offers.short_description" name="short_description" #short="ngModel" class="form-control" id="short_description"
+                    cols="30" rows="3" required></textarea>
+                  <div *ngIf="short.touched && !short.valid" class="alert alert-danger">Iveskite aprasyma</div>
+                </div>
+                <div class="form-group">
+                  <label for="description">Aprasymas</label>
+                  <textarea ngModel name="description" #description="ngModel" class="form-control" id="description" cols="30" rows="3"></textarea>
+                </div>
+                <button *ngIf="form" [disabled]="!of.valid" (click)="offs(of.value)" class="btn btn-primary">Issaugoti pasiulyma</button>
+                <button *ngIf="edit" (click)="update_offer(of.value)" class="btn btn-primary">Issaugoti pakietimus</button>
+              </div>
+              <ul *ngFor="let of of offers$ | async ">
+                <li (click)="getInfo(of)"> Pasiulymas {{ number +1 }} </li>
+              </ul>
+            </form>
+      <!--          -->
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
